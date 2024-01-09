@@ -54,7 +54,7 @@ class _QuanlyphongState extends State<Quanlyphong> {
           ],
         ),
       ) ,
-    floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+    floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
     floatingActionButton: FloatingActionButton(
       child: Icon(Icons.add),
       onPressed: () => FormModelAddRoom(context),

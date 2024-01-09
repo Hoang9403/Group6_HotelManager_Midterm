@@ -5,13 +5,12 @@ import 'package:baigiuaky/Widgets/Navbar.dart';
 import 'package:baigiuaky/Widgets/formnhap_phong.dart';
 import 'package:baigiuaky/Models/Phong.dart';
 class MyHomePage extends StatefulWidget {
-  final List<Phong> danhSachPhong;
-  MyHomePage({Key? key, required this.danhSachPhong}) : super(key: key);
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 class _MyHomePageState extends State<MyHomePage> {
   int _currentIndex = 0;
+  //List các giao diện thêm vào đây để bấm được các nút BottomNavbar
   final List<Widget> _children = [
     Quanlyphong(),
   ];
@@ -45,6 +44,10 @@ class _MyHomePageState extends State<MyHomePage> {
           BottomNavigationBarItem(
             label: 'Tìm kiếm',
             icon: Icon(Icons.find_in_page),
+          ),
+          BottomNavigationBarItem(
+            label: 'User',
+            icon: Icon(Icons.account_circle_rounded),
           ),
         ],
         currentIndex: _currentIndex,
