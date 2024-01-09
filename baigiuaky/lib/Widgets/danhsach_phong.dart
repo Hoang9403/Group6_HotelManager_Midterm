@@ -23,14 +23,14 @@ class DanhsachPhong extends StatelessWidget {
                 children: [
                   Container(
                     margin: EdgeInsets.symmetric(
-                      vertical:20,
-                      horizontal: 15,
+                      vertical:0,
+                      horizontal: 20,
                     ),
                     padding: EdgeInsets.all(10),
                     child: Image.network(
                       'https://acihome.vn/uploads/15/mau-thiet-ke-noi-that-phong-2-giuong-don-ben-trong-khach-san-3-4-5-sao-2.JPG',
-                      width: 180,
-                      height: 180,
+                      width: 200,
+                      height: 230,
                     ),
                   ),
                   Column(
@@ -58,13 +58,23 @@ class DanhsachPhong extends StatelessWidget {
                         style: TextStyle(
                           color: textColor,
                         ),
-                      )
+                      ),
+                      Divider(),
                     ],
                   ),
                 ],
               ),
               Container(
-                margin: const EdgeInsets.fromLTRB(0, 0, 0, 60),
+                child:Text(
+                  'Giá phòng: ' + phong.giaPhong.toString() + ' Vnđ',
+                  style: TextStyle(
+                    fontSize: 23,
+                    color: Colors.green,
+                  ),
+                ),
+              ),Divider(),
+              Container(
+                margin: const EdgeInsets.fromLTRB(0, 20, 0, 60),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
