@@ -1,7 +1,7 @@
 class Phong{
   final int maPhong;
   final String loaiPhong;
-  final String tinhTrangPhong;
+  late String tinhTrangPhong;
   final double giaPhong;
   Phong({
     required this.maPhong,

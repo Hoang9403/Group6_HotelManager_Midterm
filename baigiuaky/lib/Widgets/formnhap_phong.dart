@@ -3,7 +3,6 @@ import "package:flutter/material.dart";
 class FormNhapPhong extends StatefulWidget {
   final Function addRoom;
   FormNhapPhong(this.addRoom);
-
   @override
   State<FormNhapPhong> createState() => _FormNhapPhongState();
 }
@@ -11,12 +10,13 @@ class FormNhapPhong extends StatefulWidget {
 class _FormNhapPhongState extends State<FormNhapPhong> {
   final TextEditingController maPhong = TextEditingController();
   final TextEditingController giaPhong = TextEditingController();
-  final TextEditingController loaiPhong = TextEditingController();
+  String loaiPhong = "Phòng đơn";
   String tinhTrangPhong = "Trống";
+  String status = "";
   void submitData() {
     final enterMaPhong = maPhong.text;
     final enterGiaPhong = giaPhong.text;
-    final enterLoaiPhong = loaiPhong.text;
+    final enterLoaiPhong = loaiPhong;
     final entertinhtrangphong = tinhTrangPhong;
     if (enterMaPhong.isNotEmpty &&
         enterGiaPhong.isNotEmpty &&
@@ -43,10 +43,29 @@ class _FormNhapPhongState extends State<FormNhapPhong> {
               controller: maPhong,
               keyboardType: TextInputType.number,
             ),
-            TextField(
-              decoration: InputDecoration(labelText: 'Nhập loại phòng'),
-              controller: loaiPhong,
+            Row(
+              children: [
+                Text("Chọn loại phòng: "),
+                DropdownButton<String>(
+                  value: loaiPhong,
+                  onChanged: (String? newValue1) {
+                    setState(() {
+                      loaiPhong = newValue1!;
+                    });
+                  },
+                  items: <String>['Phòng đơn', 'Phòng đôi'].map((String value1) {
+                    return DropdownMenuItem<String>(
+                      value: value1,
+                      child: Text(value1),
+                    );
+                  }).toList(),
+                ),
+              ],
             ),
+            // TextField(
+            //   decoration: InputDecoration(labelText: 'Nhập loại phòng'),
+            //   controller: loaiPhong,
+            // ),
             Row(
               children: [
                 Text("Tình trạng phòng: "),
@@ -75,8 +94,9 @@ class _FormNhapPhongState extends State<FormNhapPhong> {
               child: Text('Thêm phòng'),
               onPressed: () {
                 submitData();
+                Navigator.pop(context);
               },
-            )
+            ),
           ],
         ),
       ),
