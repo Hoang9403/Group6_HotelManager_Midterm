@@ -18,11 +18,11 @@ class _MyHomePageState extends State<MyHomePage> {
   late List<Phong> danhsachphong = [
     Phong(maPhong: 108, loaiPhong:"Phòng đôi", tinhTrangPhong:"Trống", giaPhong: 20000),
     Phong(maPhong: 106, loaiPhong:"Phòng đơn", tinhTrangPhong:"Trống", giaPhong: 20000),
-    Phong(maPhong: 107, loaiPhong: "Phòng đơn", tinhTrangPhong: "Đã đặt phòng", giaPhong: 50000),
-    Phong(maPhong: 105, loaiPhong: "Phòng đôi", tinhTrangPhong: "Trống", giaPhong: 70000),
+    Phong(maPhong: 107, loaiPhong: "Phòng đơn", tinhTrangPhong: "Trống", giaPhong: 50000),
+    Phong(maPhong: 105, loaiPhong: "Phòng đôi", tinhTrangPhong: "Trống", giaPhong: 100000),
     Phong(maPhong: 104, loaiPhong: "Phòng đôi", tinhTrangPhong: "Trống", giaPhong: 70000),
-    Phong(maPhong: 103, loaiPhong: "Phòng đơn", tinhTrangPhong: "Đã đặt phòng", giaPhong: 70000),
-    Phong(maPhong: 102, loaiPhong: "Phòng đơn", tinhTrangPhong: "Đã đặt phòng", giaPhong: 70000),
+    Phong(maPhong: 103, loaiPhong: "Phòng đơn", tinhTrangPhong: "Trống", giaPhong: 200000),
+    Phong(maPhong: 102, loaiPhong: "Phòng đơn", tinhTrangPhong: "Trống", giaPhong: 30000),
   ];
   List <Khachhang> danhsachkhachhangoder = [];
   @override

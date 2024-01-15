@@ -1,4 +1,5 @@
 
+import 'package:baigiuaky/Widgets/edit_phong.dart';
 import 'package:baigiuaky/Widgets/formdat_phong.dart';
 import 'package:flutter/material.dart';
 import '../Models/Phong.dart';
@@ -8,14 +9,30 @@ class DanhsachPhong extends StatefulWidget {
   final List<Khachhang> danhsachoderroom;
   final Function () FormodaloderRoom;
   final Function(int) onDatPhong;
-  DanhsachPhong(this.danhsachphong,this.danhsachoderroom,{required this.onDelete, required this.FormodaloderRoom,required this.onDatPhong});
+  DanhsachPhong(this.danhsachphong,this.danhsachoderroom,{required this.onDelete, required this.FormodaloderRoom,required this.onDatPhong,required this.onTraPhong});
   final Function (int) onDelete;
+  final Function (int ) onTraPhong;
 
   @override
   State<DanhsachPhong> createState() => _DanhsachPhongState();
 }
 
 class _DanhsachPhongState extends State<DanhsachPhong> {
+  void _editPhong(BuildContext context, Phong phong) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditPhongScreen(phong),
+      ),
+    ).then((editedPhong) {
+      if (editedPhong != null) {
+        int index = widget.danhsachphong.indexOf(phong);
+        setState(() {
+          widget.danhsachphong[index] = editedPhong;
+        });
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -91,7 +108,7 @@ class _DanhsachPhongState extends State<DanhsachPhong> {
                       child: ElevatedButton(
                         onPressed: () {
                           if (phong.tinhTrangPhong == "Đã đặt phòng") {
-                            // Xử lý logic khi nút được nhấn trong trạng thái đã đặt phòng
+                            widget.onTraPhong(widget.danhsachphong.indexOf(phong));
                             print('Đã nhấn vào nút Trả phòng');
                           } else {
                             widget.FormodaloderRoom();
@@ -114,7 +131,7 @@ class _DanhsachPhongState extends State<DanhsachPhong> {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
-                          // Xử lý khi nút "Sửa phòng" được nhấn
+                          _editPhong(context,phong);
                         },
                         child: Text(
                           "Sửa phòng",

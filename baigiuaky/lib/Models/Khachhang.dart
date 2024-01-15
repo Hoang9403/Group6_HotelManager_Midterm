@@ -1,8 +1,7 @@
 import 'package:baigiuaky/Models/Phong.dart';
-
 class Khachhang{
   late String tenKhachhang;
-  late String ngaysinhKhachhang;
+  DateTime ngaysinhKhachhang = DateTime.now();
   late String diachiKhachhang;
   late String sodienthoaiKhachhang;
   final int MaPhong;

@@ -1,13 +1,37 @@
 
+import 'package:baigiuaky/Widgets/edit_phong.dart';
 import 'package:flutter/material.dart';
 import '../Models/Phong.dart';
-class DanhsachPhongDon extends StatelessWidget {
+class DanhsachPhongDon extends StatefulWidget {
   final List<Phong> danhsachphong;
   DanhsachPhongDon(this.danhsachphong, {required this.onDelete});
   final Function (int) onDelete;
+
+  @override
+  State<DanhsachPhongDon> createState() => _DanhsachPhongDonState();
+}
+
+class _DanhsachPhongDonState extends State<DanhsachPhongDon> {
+  void _editPhong(BuildContext context, Phong phong) {
+    // Chuyển sang màn hình chỉnh sửa và đợi kết quả trả về
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditPhongScreen(phong),
+      ),
+    ).then((editedPhong) {
+      if (editedPhong != null) {
+        // Nếu có thông tin nhân viên chỉnh sửa, cập nhật lại danh sách
+        int index = widget.danhsachphong.indexOf(phong);
+        setState(() {
+          widget.danhsachphong[index] = editedPhong;
+        });
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
-    final DanhsachPhongDon =danhsachphong.where((phong) => phong.loaiPhong == "Phòng đơn");
+    final DanhsachPhongDon =widget.danhsachphong.where((phong) => phong.loaiPhong == "Phòng đơn");
     return Column(
       children: DanhsachPhongDon.map((phong) {
         Color textColor = phong.tinhTrangPhong == 'Đã đặt phòng' ? Colors.green : Colors.grey;
@@ -97,7 +121,7 @@ class DanhsachPhongDon extends StatelessWidget {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
-                          // Xử lý khi nút "Sửa phòng" được nhấn
+                          _editPhong(context,phong);
                         },
                         child: Text(
                           "Sửa phòng",
@@ -115,7 +139,7 @@ class DanhsachPhongDon extends StatelessWidget {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
-                          onDelete(danhsachphong.indexOf(phong));
+                          widget.onDelete(widget.danhsachphong.indexOf(phong));
                         },
                         child: Text(
                           "Xóa",

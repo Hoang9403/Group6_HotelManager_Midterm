@@ -12,6 +12,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:baigiuaky/Widgets/formnhap_phong.dart';
 import 'package:baigiuaky/Models/Phong.dart';
+import 'Form_traPhong.dart';
 class Quanlyphong extends StatefulWidget {
   late List<Phong> danhsachphong;
   final List<Khachhang> danhsachkhachhangoder;
@@ -47,7 +48,7 @@ class _QuanlyphongState extends State<Quanlyphong> {
     widget.danhsachphong[index].tinhTrangPhong = "Đã đặt phòng";
     indexofphong = index;
   }
-  void orderRoom(String tenKhachhang, String ngaysinhKhachhang, String diachiKhachhang, String sodienthoaiKhachhang, int MaPhong, String LoaiPhong, double GiaPhong) {
+  void orderRoom(String tenKhachhang, DateTime ngaysinhKhachhang, String diachiKhachhang, String sodienthoaiKhachhang, int MaPhong, String LoaiPhong, double GiaPhong) {
     final newoderRoom = Khachhang(
       tenKhachhang: tenKhachhang,
       ngaysinhKhachhang: ngaysinhKhachhang,
@@ -83,6 +84,31 @@ class _QuanlyphongState extends State<Quanlyphong> {
         );
       },
     );
+  }
+  List<Khachhang> getKhachHangByMaPhong(int maPhong) {
+    List<Khachhang> khachHangTrungMaPhong = [];
+    for (Khachhang khachHang in widget.danhsachkhachhangoder) {
+      if (khachHang.MaPhong == maPhong) {
+        khachHangTrungMaPhong.add(khachHang);
+      }
+    }
+    return khachHangTrungMaPhong;
+  }
+  void onTraPhong(int index) {
+    Phong selectedPhong = widget.danhsachphong[index];
+    List<Khachhang> khachHangTrungMaPhong = getKhachHangByMaPhong(selectedPhong.maPhong);
+    if (khachHangTrungMaPhong.isNotEmpty) {
+      Khachhang selectedKhachHang = khachHangTrungMaPhong.first;
+      showModalBottomSheet(
+        context: context,
+        builder: (_) {
+          return Container(
+            child: FormTraPhong(widget.danhsachphong, widget.danhsachkhachhangoder, khachHang: selectedKhachHang, phong: selectedPhong)
+          );
+        },
+      );
+    } else {
+    }
   }
   int  _currentIndex = 0;
   void onTabTappedBottom(int index) {
@@ -121,7 +147,7 @@ class _QuanlyphongState extends State<Quanlyphong> {
       return SingleChildScrollView(
         child: Column(
           children: [
-            DanhsachPhong(widget.danhsachphong,widget.danhsachkhachhangoder,onDelete: deleteRoom,FormodaloderRoom: () => FormModelOderRoom(context),onDatPhong:onDatPhong),
+            DanhsachPhong(widget.danhsachphong,widget.danhsachkhachhangoder,onDelete: deleteRoom,FormodaloderRoom: () => FormModelOderRoom(context),onDatPhong:onDatPhong,onTraPhong: onTraPhong,),
           ],
         ),
       );
@@ -136,53 +162,54 @@ class _QuanlyphongState extends State<Quanlyphong> {
     }
     return Container();
   }
-
   @override
   Widget build(BuildContext context) {
     if (sapxep == "Từ Z-A") {
       setState(() {
         widget.danhsachphong = List.from(widget.danhsachphong.reversed);
+        filteredRooms = List.from(filteredRooms.reversed);
       });
     } else {
       setState(() {
         widget.danhsachphong.sort((a, b) => a.maPhong.compareTo(b.maPhong));
+        filteredRooms.sort((a, b) => a.maPhong.compareTo(b.maPhong));
       });
     }
     return Scaffold(
-     drawer: Navbar(),
+      drawer: Navbar(),
       body:SingleChildScrollView(
         child: Column(
           children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text("Sắp xếp theo: ",style: TextStyle(color: Colors.black)),
-            DropdownButton<String>(
-          value: sapxep,
-          onChanged: (String? newValue1) {
-            setState(() {
-              sapxep = newValue1!;
-            });
-          },
-          items: <String>['Từ A-Z', 'Từ Z-A'].map((String value1) {
-            return DropdownMenuItem<String>(
-              value: value1,
-              child: Text(value1),
-            );
-          }).toList(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text("Sắp xếp theo: ",style: TextStyle(color: Colors.black)),
+                DropdownButton<String>(
+                  value: sapxep,
+                  onChanged: (String? newValue1) {
+                    setState(() {
+                      sapxep = newValue1!;
+                    });
+                  },
+                  items: <String>['Từ A-Z', 'Từ Z-A'].map((String value1) {
+                    return DropdownMenuItem<String>(
+                      value: value1,
+                      child: Text(value1),
+                    );
+                  }).toList(),
+                ),
+              ],
             ),
-          ],
-          ),
             getBodyWidget(_currentIndex),
           ],
         ),
       ) ,
-    floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
-    floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-    floatingActionButton: FloatingActionButton(
-      child: Icon(Icons.add),
-      onPressed: () => FormModelAddRoom(context),
-    ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
+      floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () => FormModelAddRoom(context),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(

@@ -1,6 +1,7 @@
 
 import 'package:baigiuaky/Widgets/formdat_phong.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../Models/Phong.dart';
 import 'package:baigiuaky/Models/Khachhang.dart';
 class DanhsachKhachhang extends StatefulWidget {
@@ -44,7 +45,7 @@ class _DanhsachKhachhangState extends State<DanhsachKhachhang> {
                           ),
                         ),
                         Text(
-                          'Ngày sinh: ' + khachhang.ngaysinhKhachhang,
+                          'Ngày sinh: ' + (DateFormat('dd-MM-yyyy').format(khachhang.ngaysinhKhachhang)),
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
@@ -74,6 +75,7 @@ class _DanhsachKhachhangState extends State<DanhsachKhachhang> {
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
+                            color: Colors.green,
                           ),
                         ),
                       ],

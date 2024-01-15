@@ -1,6 +1,6 @@
 class Phong{
   final int maPhong;
-  final String loaiPhong;
+  late final String loaiPhong;
   late String tinhTrangPhong;
   final double giaPhong;
   Phong({

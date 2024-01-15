@@ -29,6 +29,23 @@ class _FormNhapPhongState extends State<FormNhapPhong> {
       );
     }
   }
+  void _showSuccessSnackbar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: Duration(seconds: 2),
+        content: Row(
+          children: [
+            Icon(
+              Icons.check_circle,
+              color: Colors.green,
+            ),
+            SizedBox(width: 8),
+            Text('Thêm phòng thành công', style: TextStyle(color: Colors.green)),
+          ],
+        ),
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -95,6 +112,7 @@ class _FormNhapPhongState extends State<FormNhapPhong> {
               onPressed: () {
                 submitData();
                 Navigator.pop(context);
+                _showSuccessSnackbar();
               },
             ),
           ],
