@@ -1,8 +1,23 @@
+import 'package:baigiuaky/Widgets/Quanly_phongDoi.dart';
+import 'package:baigiuaky/Widgets/Quanly_phongDon.dart';
+import 'package:baigiuaky/Widgets/danhsach_phongDoi.dart';
 import 'package:flutter/material.dart';
-class Navbar extends StatelessWidget {
+class Navbar extends StatefulWidget {
   const Navbar({super.key});
+
+  @override
+  State<Navbar> createState() => _NavbarState();
+}
+
+class _NavbarState extends State<Navbar> {
   @override
   Widget build(BuildContext context) {
+    int _selectedIndex = 0;
+    void _onItemTapped(int index) {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -41,7 +56,11 @@ class Navbar extends StatelessWidget {
               fontSize: 18,
               ),
             ),
-            onTap: () => null,
+            selected: _selectedIndex == 0,
+            onTap: (){
+              _onItemTapped(0);
+              Navigator.pop(context);
+            },
           ),
           Divider(),
           ListTile(
@@ -58,13 +77,18 @@ class Navbar extends StatelessWidget {
                 fontSize: 18,
               ),
             ),
-            onTap: () => null,
+            selected: _selectedIndex == 1,
+            onTap: () {
+              _onItemTapped(1);
+              Navigator.pop(context);
+              print("đây là danh sach phong doi");
+            },
           ),
           Divider(),
           ListTile(
             leading:ClipOval(
               child: Image.network(
-                'https://cdn.pixabay.com/photo/2015/12/16/17/41/bell-1096280_960_720.png',
+                'https://media.istockphoto.com/id/1344512181/vi/vec-to/bi%E1%BB%83u-t%C6%B0%E1%BB%A3ng-loa-m%C3%A0u-%C4%91%E1%BB%8F.jpg?s=612x612&w=0&k=20&c=t8xmvCQKhdqmyG2ify0vXMIgK5ty7IpOyicWE-Rrpzg=',
                 width: 40,
                 height:40 ,
                 fit: BoxFit.cover,

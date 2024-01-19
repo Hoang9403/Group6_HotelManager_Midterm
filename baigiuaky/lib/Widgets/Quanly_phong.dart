@@ -1,30 +1,230 @@
+import 'package:baigiuaky/Models/Khachhang.dart';
 import 'package:baigiuaky/Models/Phong.dart';
-import 'package:baigiuaky/Widgets/danhsach_phongdoi.dart';
+import 'package:baigiuaky/Widgets/DanhsachKhachhang.dart';
+import 'package:baigiuaky/Widgets/Form_timkiem.dart';
+import 'package:baigiuaky/Widgets/Navbar.dart';
+import 'package:baigiuaky/Widgets/Quanly_phongDoi.dart';
+import 'package:baigiuaky/Widgets/Quanly_phongDon.dart';
+import 'package:baigiuaky/Widgets/danhsach_phong.dart';
+import 'package:baigiuaky/Widgets/danhsach_phongDoi.dart';
+import 'package:baigiuaky/Widgets/formdat_phong.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:baigiuaky/Widgets/danhsach_phongdon.dart';
 import 'package:flutter/material.dart';
+import 'package:baigiuaky/Widgets/formnhap_phong.dart';
+import 'package:baigiuaky/Models/Phong.dart';
+import 'Form_traPhong.dart';
+class Quanlyphong extends StatefulWidget {
+  late List<Phong> danhsachphong;
+  final List<Khachhang> danhsachkhachhangoder;
+  Quanlyphong(this.danhsachphong,this.danhsachkhachhangoder);
+  @override
+  State<Quanlyphong> createState() => _QuanlyphongState();
+}
+class _QuanlyphongState extends State<Quanlyphong> {
+  int indexofphong = 0;
+  late String sapxep = "Từ A-Z";
+  @override
+  void deleteRoom(int index) {
+    setState(() {
+      widget.danhsachphong.removeAt(index);
+    });
+  }
+  void deleteKhachhangoder(int index) {
+    setState(() {
+      widget.danhsachkhachhangoder.removeAt(index);
+    });
+  }
+  addRoom(int maPhong, String loaiPhong,String tinhTrangPhong, double giaPhong){
+    final newRoom = Phong(
+        maPhong: maPhong,
+        loaiPhong: loaiPhong,
+        tinhTrangPhong: tinhTrangPhong,
+        giaPhong: giaPhong);
+    setState(() {
+      widget.danhsachphong.add(newRoom);
+    });
+  }
+  void onDatPhong(int index) {
+    widget.danhsachphong[index].tinhTrangPhong = "Đã đặt phòng";
+    indexofphong = index;
+  }
+  void orderRoom(String tenKhachhang, DateTime ngaysinhKhachhang, String diachiKhachhang, String sodienthoaiKhachhang, int MaPhong, String LoaiPhong, double GiaPhong) {
+    final newoderRoom = Khachhang(
+      tenKhachhang: tenKhachhang,
+      ngaysinhKhachhang: ngaysinhKhachhang,
+      diachiKhachhang: diachiKhachhang,
+      sodienthoaiKhachhang: sodienthoaiKhachhang,
+      MaPhong: widget.danhsachphong[indexofphong].maPhong,
+      LoaiPhong: widget.danhsachphong[indexofphong].loaiPhong,
+      GiaPhong: widget.danhsachphong[indexofphong].giaPhong,
+    );
 
-class Quanlyphong extends StatelessWidget {
-  final List<Phong> danhsachphongdoi =[
-    Phong(maPhong: 108, loaiPhong:"Phòng đôi", tinhTrangPhong:"Trống", giaPhong: 20000),
-    Phong(maPhong: 106, loaiPhong:"Phòng đôi", tinhTrangPhong:"Trống", giaPhong: 20000)
-  ];
-  final List<Phong> danhsachphongdon = [
-    Phong(maPhong: 107, loaiPhong: "Phòng đơn", tinhTrangPhong: "Đã đặt phòng", giaPhong: 50000),
-    Phong(maPhong: 105, loaiPhong: "Phòng đơn", tinhTrangPhong: "Trống", giaPhong: 70000),
-    Phong(maPhong: 104, loaiPhong: "Phòng đơn", tinhTrangPhong: "Trống", giaPhong: 70000),
-    Phong(maPhong: 103, loaiPhong: "Phòng đơn", tinhTrangPhong: "Đã đặt phòng", giaPhong: 70000),
-    Phong(maPhong: 102, loaiPhong: "Phòng đơn", tinhTrangPhong: "Đã đặt phòng", giaPhong: 70000),
-  ];
+    setState(() {
+      widget.danhsachkhachhangoder.add(newoderRoom);
+    });
+  }
+  FormModelAddRoom(BuildContext context){
+    showModalBottomSheet(context: context,
+      builder:(_){
+        return GestureDetector(
+          onTap: (){},
+          child: FormNhapPhong(addRoom),
+          behavior: HitTestBehavior.opaque,
+        );
+      },
+    );
+  }
+  FormModelOderRoom(BuildContext context){
+    showModalBottomSheet(context: context,
+      builder:(_){
+        return GestureDetector(
+          onTap: (){},
+          child: FormDatPhong(orderRoom),
+          behavior: HitTestBehavior.opaque,
+        );
+      },
+    );
+  }
+  List<Khachhang> getKhachHangByMaPhong(int maPhong) {
+    List<Khachhang> khachHangTrungMaPhong = [];
+    for (Khachhang khachHang in widget.danhsachkhachhangoder) {
+      if (khachHang.MaPhong == maPhong) {
+        khachHangTrungMaPhong.add(khachHang);
+      }
+    }
+    return khachHangTrungMaPhong;
+  }
+  void onTraPhong(int index) {
+    Phong selectedPhong = widget.danhsachphong[index];
+    List<Khachhang> khachHangTrungMaPhong = getKhachHangByMaPhong(selectedPhong.maPhong);
+    if (khachHangTrungMaPhong.isNotEmpty) {
+      Khachhang selectedKhachHang = khachHangTrungMaPhong.first;
+      showModalBottomSheet(
+        context: context,
+        builder: (_) {
+          return Container(
+            child: FormTraPhong(widget.danhsachphong, widget.danhsachkhachhangoder, khachHang: selectedKhachHang, phong: selectedPhong)
+          );
+        },
+      );
+    } else {
+    }
+  }
+  int  _currentIndex = 0;
+  void onTabTappedBottom(int index) {
+    setState(() {
+      _currentIndex = index;
+      print(_currentIndex);
+    });
+  }
+  List<Phong> filteredRooms = [];
+  void searchRooms(String searchTerm) {
+    if (searchTerm.isEmpty) {
+      setState(() {
+        filteredRooms = [];
+      });
+      return;
+    }
+    List<Phong> results = widget.danhsachphong
+        .where((room) => room.maPhong.toString().contains(searchTerm) ||
+        room.loaiPhong.toLowerCase().contains(searchTerm.toLowerCase()) ||
+        room.tinhTrangPhong.toLowerCase().contains(searchTerm.toLowerCase()) ||
+        room.giaPhong.toString().contains(searchTerm))
+        .toList();
+    setState(() {
+      filteredRooms = results;
+    });
+  }
+  void deleteRoomFormSearch(int index) {
+    setState(() {
+      filteredRooms.removeAt(index);
+      Phong deletedRoom = filteredRooms[index];
+      widget.danhsachphong.removeWhere((phong) => phong.maPhong == deletedRoom.maPhong);
+    });
+  }
+  Widget getBodyWidget(int currentIndex) {
+    if (currentIndex == 0) {
+      return SingleChildScrollView(
+        child: Column(
+          children: [
+            DanhsachPhong(widget.danhsachphong,widget.danhsachkhachhangoder,onDelete: deleteRoom,FormodaloderRoom: () => FormModelOderRoom(context),onDatPhong:onDatPhong,onTraPhong: onTraPhong,),
+          ],
+        ),
+      );
+    } else if (currentIndex == 1) {
+      return SearchForm(
+        onSearch: searchRooms,
+        danhsachphong: widget.danhsachphong,
+        filteredRooms: filteredRooms,
+        searchRooms: searchRooms,
+        deleteRoomFormSearch: deleteRoomFormSearch,
+      );
+    }
+    return Container();
+  }
   @override
   Widget build(BuildContext context) {
-    danhsachphongdoi.sort((a, b) => a.maPhong.compareTo(b.maPhong));
-    danhsachphongdon.sort((a, b) => a.maPhong.compareTo(b.maPhong));
-    return Column(
-      children: [
-        DanhsachPhongdoi(danhsachphongdoi),
-        DanhsachPhongdon(danhsachphongdon),
-      ],
+    if (sapxep == "Từ Z-A") {
+      setState(() {
+        widget.danhsachphong = List.from(widget.danhsachphong.reversed);
+        filteredRooms = List.from(filteredRooms.reversed);
+      });
+    } else {
+      setState(() {
+        widget.danhsachphong.sort((a, b) => a.maPhong.compareTo(b.maPhong));
+        filteredRooms.sort((a, b) => a.maPhong.compareTo(b.maPhong));
+      });
+    }
+    return Scaffold(
+      drawer: Navbar(),
+      body:SingleChildScrollView(
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text("Sắp xếp theo: ",style: TextStyle(color: Colors.black)),
+                DropdownButton<String>(
+                  value: sapxep,
+                  onChanged: (String? newValue1) {
+                    setState(() {
+                      sapxep = newValue1!;
+                    });
+                  },
+                  items: <String>['Từ A-Z', 'Từ Z-A'].map((String value1) {
+                    return DropdownMenuItem<String>(
+                      value: value1,
+                      child: Text(value1),
+                    );
+                  }).toList(),
+                ),
+              ],
+            ),
+            getBodyWidget(_currentIndex),
+          ],
+        ),
+      ) ,
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
+      floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () => FormModelAddRoom(context),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(
+            label: 'Home',
+            icon: Icon(Icons.home),
+          ),
+          BottomNavigationBarItem(
+            label: 'Tìm kiếm',
+            icon: Icon(Icons.find_in_page),
+          ),
+        ],
+        currentIndex: _currentIndex,
+        onTap:onTabTappedBottom,
+      ),
     );
   }
 }
+

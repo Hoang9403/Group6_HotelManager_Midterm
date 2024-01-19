@@ -1,26 +1,50 @@
+
+import 'package:baigiuaky/Widgets/edit_phong.dart';
+import 'package:baigiuaky/Widgets/formdat_phong.dart';
 import 'package:flutter/material.dart';
 import '../Models/Phong.dart';
+import 'package:baigiuaky/Models/Khachhang.dart';
+class DanhsachPhong extends StatefulWidget {
+  final List<Phong> danhsachphong;
+  final List<Khachhang> danhsachoderroom;
+  final Function () FormodaloderRoom;
+  final Function(int) onDatPhong;
+  DanhsachPhong(this.danhsachphong,this.danhsachoderroom,{required this.onDelete, required this.FormodaloderRoom,required this.onDatPhong,required this.onTraPhong});
+  final Function (int) onDelete;
+  final Function (int ) onTraPhong;
 
-class DanhsachPhongdon extends StatelessWidget {
-  final List<Phong> danhsachphongdon;
+  @override
+  State<DanhsachPhong> createState() => _DanhsachPhongState();
+}
 
-  DanhsachPhongdon(this.danhsachphongdon);
-
+class _DanhsachPhongState extends State<DanhsachPhong> {
+  void _editPhong(BuildContext context, Phong phong) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditPhongScreen(phong),
+      ),
+    ).then((editedPhong) {
+      if (editedPhong != null) {
+        int index = widget.danhsachphong.indexOf(phong);
+        setState(() {
+          widget.danhsachphong[index] = editedPhong;
+        });
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: danhsachphongdon.map((phong) {
-        Color textColor =
-        phong.tinhTrangPhong == 'Đã đặt phòng' ? Colors.green : Colors.grey;
-        String textbutton = " ";
-        Color buttonColor = phong.tinhTrangPhong == 'Đã đặt phòng' ? Colors.green : Colors.blue;
-
+      children: widget.danhsachphong.map((phong) {
+        Color textColor = phong.tinhTrangPhong == 'Đã đặt phòng' ? Colors.green : Colors.grey;
+        String Textbutton = "";
         if (phong.tinhTrangPhong == "Đã đặt phòng") {
-          textbutton = "Trả phòng";
+          Textbutton = "Trả phòng";
         } else {
-          textbutton = "Đặt phòng";
+          Textbutton = "Đặt phòng";
         }
-
+        Color buttonColor = phong.tinhTrangPhong == 'Đã đặt phòng' ? Colors.green : Colors.blue;
         return Card(
           child: Column(
             children: <Widget>[
@@ -28,14 +52,14 @@ class DanhsachPhongdon extends StatelessWidget {
                 children: [
                   Container(
                     margin: EdgeInsets.symmetric(
-                      vertical:10,
+                      vertical:20,
                       horizontal: 15,
                     ),
                     padding: EdgeInsets.all(10),
                     child: Image.network(
                       'https://acihome.vn/uploads/15/mau-thiet-ke-noi-that-phong-2-giuong-don-ben-trong-khach-san-3-4-5-sao-2.JPG',
-                      width: 150,
-                      height: 150,
+                      width: 180,
+                      height: 180,
                     ),
                   ),
                   Column(
@@ -49,7 +73,7 @@ class DanhsachPhongdon extends StatelessWidget {
                           color: Colors.blue,
                         ),
                       ),
-                      Divider(),
+                      SizedBox(height: 10),
                       Text(
                         'Loại phòng: ' + phong.loaiPhong,
                         style: TextStyle(
@@ -57,11 +81,18 @@ class DanhsachPhongdon extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Divider(),
+                      SizedBox(height: 10),
                       Text(
                         'Trạng thái: ' + phong.tinhTrangPhong,
                         style: TextStyle(
                           color: textColor,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        'Giá phòng: ' + phong.giaPhong.toString(),
+                        style: TextStyle(
+                          color: Colors.green,
                         ),
                       )
                     ],
@@ -69,9 +100,7 @@ class DanhsachPhongdon extends StatelessWidget {
                 ],
               ),
               Container(
-                margin: EdgeInsets.symmetric(
-                  vertical: 10,
-                ),
+                margin: const EdgeInsets.fromLTRB(0, 0, 0, 60),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -79,15 +108,15 @@ class DanhsachPhongdon extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: () {
                           if (phong.tinhTrangPhong == "Đã đặt phòng") {
-                            // Xử lý logic khi nút được nhấn trong trạng thái đã đặt phòng
+                            widget.onTraPhong(widget.danhsachphong.indexOf(phong));
                             print('Đã nhấn vào nút Trả phòng');
                           } else {
-                            // Xử lý logic khi nút được nhấn trong trạng thái khác đã đặt phòng
-                            print('Đã nhấn vào nút Đặt phòng');
+                            widget.FormodaloderRoom();
+                            widget.onDatPhong(widget.danhsachphong.indexOf(phong));
                           }
                         },
                         child: Text(
-                          "$textbutton",
+                          "${Textbutton}",
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 15,
@@ -98,11 +127,11 @@ class DanhsachPhongdon extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(width: 8), // Khoảng cách giữa các nút
+                    SizedBox(width: 8),
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
-                          // Xử lý khi nút "Sửa phòng" được nhấn
+                          _editPhong(context,phong);
                         },
                         child: Text(
                           "Sửa phòng",
@@ -120,7 +149,7 @@ class DanhsachPhongdon extends StatelessWidget {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
-                          // Xử lý khi nút "Xóa" được nhấn
+                          widget.onDelete(widget.danhsachphong.indexOf(phong));
                         },
                         child: Text(
                           "Xóa",

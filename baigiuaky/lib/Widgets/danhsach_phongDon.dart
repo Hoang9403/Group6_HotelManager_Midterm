@@ -1,22 +1,47 @@
+
+import 'package:baigiuaky/Widgets/edit_phong.dart';
 import 'package:flutter/material.dart';
 import '../Models/Phong.dart';
-
-class DanhsachPhongdoi extends StatelessWidget {
-  final List<Phong> danhsachphongdoi;
-
-  DanhsachPhongdoi(this.danhsachphongdoi);
+class DanhsachPhongDon extends StatefulWidget {
+  final List<Phong> danhsachphong;
+  DanhsachPhongDon(this.danhsachphong, {required this.onDelete});
+  final Function (int) onDelete;
 
   @override
+  State<DanhsachPhongDon> createState() => _DanhsachPhongDonState();
+}
+
+class _DanhsachPhongDonState extends State<DanhsachPhongDon> {
+  void _editPhong(BuildContext context, Phong phong) {
+    // Chuyển sang màn hình chỉnh sửa và đợi kết quả trả về
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditPhongScreen(phong),
+      ),
+    ).then((editedPhong) {
+      if (editedPhong != null) {
+        // Nếu có thông tin nhân viên chỉnh sửa, cập nhật lại danh sách
+        int index = widget.danhsachphong.indexOf(phong);
+        setState(() {
+          widget.danhsachphong[index] = editedPhong;
+        });
+      }
+    });
+  }
+  @override
   Widget build(BuildContext context) {
+    final DanhsachPhongDon =widget.danhsachphong.where((phong) => phong.loaiPhong == "Phòng đơn");
     return Column(
-      children: danhsachphongdoi.map((phong) {
+      children: DanhsachPhongDon.map((phong) {
         Color textColor = phong.tinhTrangPhong == 'Đã đặt phòng' ? Colors.green : Colors.grey;
         String Textbutton = "";
-        if (phong.tinhTrangPhong == "Đã đặt phòng ") {
+        if (phong.tinhTrangPhong == "Đã đặt phòng") {
           Textbutton = "Trả phòng";
         } else {
           Textbutton = "Đặt phòng";
         }
+        Color buttonColor = phong.tinhTrangPhong == 'Đã đặt phòng' ? Colors.green : Colors.blue;
         return Card(
           child: Column(
             children: <Widget>[
@@ -24,14 +49,14 @@ class DanhsachPhongdoi extends StatelessWidget {
                 children: [
                   Container(
                     margin: EdgeInsets.symmetric(
-                      vertical:10,
+                      vertical:20,
                       horizontal: 15,
                     ),
                     padding: EdgeInsets.all(10),
                     child: Image.network(
                       'https://acihome.vn/uploads/15/mau-thiet-ke-noi-that-phong-2-giuong-don-ben-trong-khach-san-3-4-5-sao-2.JPG',
-                      width: 150,
-                      height: 150,
+                      width: 180,
+                      height: 180,
                     ),
                   ),
                   Column(
@@ -65,9 +90,7 @@ class DanhsachPhongdoi extends StatelessWidget {
                 ],
               ),
               Container(
-                margin: EdgeInsets.symmetric(
-                  vertical: 10,
-                ),
+                margin: const EdgeInsets.fromLTRB(0, 0, 0, 60),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -90,7 +113,7 @@ class DanhsachPhongdoi extends StatelessWidget {
                           ),
                         ),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
+                          backgroundColor: buttonColor,
                         ),
                       ),
                     ),
@@ -98,7 +121,7 @@ class DanhsachPhongdoi extends StatelessWidget {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
-                          // Xử lý khi nút "Sửa phòng" được nhấn
+                          _editPhong(context,phong);
                         },
                         child: Text(
                           "Sửa phòng",
@@ -116,7 +139,7 @@ class DanhsachPhongdoi extends StatelessWidget {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
-                          // Xử lý khi nút "Xóa" được nhấn
+                          widget.onDelete(widget.danhsachphong.indexOf(phong));
                         },
                         child: Text(
                           "Xóa",
