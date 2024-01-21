@@ -1,3 +1,4 @@
+import "package:confirm_dialog/confirm_dialog.dart";
 import "package:flutter/material.dart";
 
 class FormNhapPhong extends StatefulWidget {
@@ -109,10 +110,19 @@ class _FormNhapPhongState extends State<FormNhapPhong> {
             ),
             TextButton(
               child: Text('Thêm phòng'),
-              onPressed: () {
-                submitData();
-                Navigator.pop(context);
-                _showSuccessSnackbar();
+              onPressed: () async {
+                if (await confirm(
+                  context,
+                  title: const Text('Xác thêm phòng '),
+                  content: const Text('Bạn có muốn tạo thêm phòng ?'),
+                  textCancel: const Text('Hủy'),
+                  textOK: const Text('Xác nhận'),
+                )) {
+                  submitData();
+                  Navigator.pop(context);
+                  _showSuccessSnackbar();
+                }
+                return print('pressedCancel');
               },
             ),
           ],

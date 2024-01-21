@@ -45,7 +45,7 @@ class _DanhsachKhachhangState extends State<DanhsachKhachhang> {
                           ),
                         ),
                         Text(
-                          'Ngày sinh: ' + (DateFormat('dd-MM-yyyy').format(khachhang.ngaysinhKhachhang)),
+                          'Ngày sinh: ${khachhang.ngaysinhKhachhang.day}/${khachhang.ngaysinhKhachhang.month}/${khachhang.ngaysinhKhachhang.year}' ,
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,

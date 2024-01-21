@@ -84,7 +84,7 @@ class _FormDatPhongState extends State<FormDatPhong > {
                     );
                   }
                   },
-                    child:const Text("Sửa")),
+                    child:const Text("Thay đổi")),
               ],
             ),
             TextField(
