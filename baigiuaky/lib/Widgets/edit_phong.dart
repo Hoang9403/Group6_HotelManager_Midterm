@@ -1,4 +1,5 @@
 import 'package:baigiuaky/Models/Phong.dart';
+import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 
 
@@ -118,16 +119,24 @@ class _EditPhongScreenState extends State<EditPhongScreen> {
 
               SizedBox(height: 16.0),
               ElevatedButton(
-                onPressed: () {
-                  // Lưu thông tin chỉnh sửa và trả về kết quả
-                  Phong editPhong = Phong(
-                      maPhong: int.parse(MaPhongController.text),
-                      loaiPhong: loaiPhong,
-                      tinhTrangPhong:tinhTrangPhong,
-                      giaPhong: double.parse(GiaPhongController.text)
-                  );
-                  Navigator.pop(context, editPhong);
-                  _showSuccessSnackbar();
+                onPressed: () async {
+                  if (await confirm(
+                    context,
+                    title: const Text('Xác nhận sửa '),
+                    content: const Text('Bạn có muốn sửa thông tin phòng ?'),
+                    textCancel: const Text('Hủy'),
+                    textOK: const Text('Xác nhận'),
+                  )) {
+                    Phong editPhong = Phong(
+                        maPhong: int.parse(MaPhongController.text),
+                        loaiPhong: loaiPhong,
+                        tinhTrangPhong:tinhTrangPhong,
+                        giaPhong: double.parse(GiaPhongController.text)
+                    );
+                    Navigator.pop(context, editPhong);
+                    _showSuccessSnackbar();
+                  }
+                  return print('pressedCancel');
                 },
                 child: Text('Lưu Thay Đổi'),
               ),

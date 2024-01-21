@@ -1,3 +1,4 @@
+import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:baigiuaky/Models/Khachhang.dart';
 import 'package:baigiuaky/Models/Phong.dart';
@@ -35,7 +36,7 @@ class _FormTraPhongState extends State<FormTraPhong> {
         return i;
       }
     }
-    return -1; // Trả về -1 nếu không tìm thấy
+    return -1; //
   }
   @override
   Widget build(BuildContext context) {
@@ -53,7 +54,7 @@ class _FormTraPhongState extends State<FormTraPhong> {
               fontSize: 20,
             ),
           ),
-          Text('Ngày sinh: ${widget.khachHang.ngaysinhKhachhang}',
+          Text('Ngày sinh: ${widget.khachHang.ngaysinhKhachhang.day}/${widget.khachHang.ngaysinhKhachhang.month}/${widget.khachHang.ngaysinhKhachhang.year}',
             style: TextStyle(
               fontSize: 20,
             ),),
@@ -87,16 +88,25 @@ class _FormTraPhongState extends State<FormTraPhong> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
-                onPressed: () {
-                  int index = findPhongIndex(widget.phong, widget.danhsachphong);
-                  if (index != -1) {
-                    setState(() {
-                      widget.danhsachphong[index].tinhTrangPhong = "Trống";
-                      widget.danhsachkhachhang.remove(widget.khachHang);
-                    });
+                onPressed: () async {
+                  if (await confirm(
+                    context,
+                    title: const Text('Xác nhận trả phòng '),
+                    content: const Text('Bạn có muốn trả phòng ?'),
+                    textCancel: const Text('Hủy'),
+                    textOK: const Text('Xác nhận'),
+                  )) {
+                    int index = findPhongIndex(widget.phong, widget.danhsachphong);
+                    if (index != -1) {
+                      setState(() {
+                        widget.danhsachphong[index].tinhTrangPhong = "Trống";
+                        widget.danhsachkhachhang.remove(widget.khachHang);
+                      });
+                    }
+                     Navigator.pop(context);
+                    _showSuccessSnackbar();
                   }
-                  Navigator.pop(context);
-                  _showSuccessSnackbar();
+                  return print('pressedCancel');
                 },
                 child: Text('Trả phòng',style: TextStyle(color: Colors.green,fontSize: 20),),
               ),
